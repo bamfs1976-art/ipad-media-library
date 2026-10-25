@@ -136,6 +136,7 @@ export async function fetchListingPage(raw: string): Promise<{ url: string; html
       url = checkUrl(new URL(res.location, url).toString());
       continue;
     }
+    if (res.status === 429) throw new FetchError("The folder server asked to slow down", 429);
     if (res.status !== 200) throw new FetchError(`The folder replied with error ${res.status}`);
     return { url: url.toString(), html: res.body };
   }

@@ -74,7 +74,7 @@ export default function SourcesView({ sources, scan, onAdd, onRescan, onCancel, 
                     <p className="truncate text-sm text-muted">{s.url}</p>
                     <p className="mt-1 text-sm text-muted">
                       {s.fileCount} files · {formatDate(s.lastScan)}
-                      {s.failed > 0 && ` · ${s.failed} folders failed to load`}
+                      {s.failed > 0 && ` · ${s.failed} folder${s.failed === 1 ? "" : "s"} failed to load`}
                     </p>
                   </div>
                   <div className="flex gap-2">

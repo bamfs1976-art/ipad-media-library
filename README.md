@@ -27,7 +27,14 @@ To test against a folder server on your own computer, start the app with `ALLOW_
 
 ## Deploy
 
-Netlify builds the site from `netlify.toml`. No environment variables are needed.
+Live at https://ipad-media-library.netlify.app (Netlify project `ipad-media-library`, team `bamfs1976`).
+
+Netlify builds the site from `netlify.toml`. No environment variables are needed. The project is not linked to GitHub yet, so pushes do not redeploy on their own. To turn that on, open the project in Netlify, go to Project configuration, Build and deploy, and link this repository.
+
+## Good to know
+
+- The app reads plain folder listings (pages titled "Index of"). Designed web pages hold no file links to read.
+- Some servers limit how fast you read them. The scan pauses between folders and retries when asked to slow down, but a few folders still fail on busy servers. Press Rescan later.
 
 ## Credits
 

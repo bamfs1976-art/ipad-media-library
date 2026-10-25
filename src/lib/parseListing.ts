@@ -51,9 +51,11 @@ export function parseListing(html: string, pageUrl: string): ListingEntry[] {
     } catch {
       continue;
     }
-    if (resolved.origin !== page.origin) continue;
+    // Some servers link to their own folders over http from an https page, so compare hosts only.
+    if (resolved.host !== page.host || !/^https?:$/.test(resolved.protocol)) continue;
     if (!resolved.pathname.startsWith(basePath) || resolved.pathname === basePath) continue;
 
+    resolved.protocol = page.protocol;
     resolved.hash = "";
     resolved.search = "";
     const url = resolved.toString();

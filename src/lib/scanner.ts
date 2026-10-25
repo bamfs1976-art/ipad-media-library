@@ -22,11 +22,32 @@ export interface ScanResult {
   hitPageLimit: boolean;
 }
 
+// Pause between folders so folder servers do not rate limit the scan.
+const PAGE_DELAY_MS = 300;
+const RETRY_DELAYS_MS = [3000, 8000];
+
+function wait(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(resolve, ms);
+    signal?.addEventListener("abort", () => {
+      clearTimeout(timer);
+      reject(new DOMException("Scan cancelled", "AbortError"));
+    }, { once: true });
+  });
+}
+
 async function listPage(url: string, signal?: AbortSignal): Promise<ListingResponse> {
-  const res = await fetch(`/api/list?url=${encodeURIComponent(url)}`, { signal });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error ?? "Could not read folder");
-  return data as ListingResponse;
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(`/api/list?url=${encodeURIComponent(url)}`, { signal });
+    const data = await res.json();
+    if (res.ok) return data as ListingResponse;
+    // The folder server asked us to slow down, so wait and try again.
+    if (res.status === 429 && attempt < RETRY_DELAYS_MS.length) {
+      await wait(RETRY_DELAYS_MS[attempt], signal);
+      continue;
+    }
+    throw new Error(data.error ?? "Could not read folder");
+  }
 }
 
 // Walks a web folder and every folder below it, collecting media files.
@@ -48,6 +69,7 @@ export async function scanSource(
     const next = queue.shift()!;
     if (visited.has(next.url)) continue;
     visited.add(next.url);
+    if (pagesRead > 0) await wait(PAGE_DELAY_MS, signal);
 
     try {
       const page = await listPage(next.url, signal);

@@ -67,3 +67,10 @@ test("blocks private and local addresses", () => {
   assert.throws(() => checkUrl("file:///etc/passwd"));
   assert.doesNotThrow(() => checkUrl("https://example.com/media/"));
 });
+
+test("treats http links on an https page as the same site", () => {
+  const html = `<a href="http://example.com/pub/movies/">movies</a><a href="http://evil.com/pub/x/">x</a>`;
+  assert.deepEqual(parseListing(html, "https://example.com/pub/"), [
+    { name: "movies", url: "https://example.com/pub/movies/", isFolder: true },
+  ]);
+});
