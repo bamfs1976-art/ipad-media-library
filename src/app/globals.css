@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f6f5f2;
+  --surface: #ffffff;
+  --surface-2: #efede8;
+  --text: #1c1b19;
+  --muted: #6b6860;
+  --border: #dedad2;
+  --accent: #3b5bdb;
+  --accent-soft: #e4e9fb;
+  --danger: #c92a2a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131312;
+    --surface: #1d1d1b;
+    --surface-2: #272724;
+    --text: #f1efea;
+    --muted: #a19d94;
+    --border: #34332f;
+    --accent: #8ea4f5;
+    --accent-soft: #232b48;
+    --danger: #ff8787;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+}
+
+html,
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Keep content clear of the iPad home indicator. */
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+}

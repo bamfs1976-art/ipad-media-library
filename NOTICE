@@ -1,0 +1,7 @@
+ipad-media-library
+
+src/lib/nameCleaner.ts contains file name cleaning logic ported from
+argus (https://github.com/neon16bit/argus), Copyright 2026 neon16bit,
+licensed under the Apache License, Version 2.0. A copy of that licence
+is in licenses/argus-LICENSE. The logic was translated from Dart to
+TypeScript and adapted.
